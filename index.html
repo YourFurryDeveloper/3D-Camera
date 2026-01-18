@@ -26,6 +26,9 @@
             position: absolute;
             top: 0;
             left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
         }
 
         #display-container {
@@ -41,11 +44,52 @@
             width: 100%;
             object-fit: cover;
         }
+
+
+        #recbtn {
+            aspect-ratio: 1 / 1;
+            width: 70px;
+            border-radius: 100%;
+            background-color: transparent;
+            border: 3px solid rgba(255, 0, 0, 0.83);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 50px;
+        }
+
+        #recbtn:active {
+            border: 3px solid rgba(255, 0, 0, 0.494);
+        }
+
+        #recbtncenter {
+            aspect-ratio: 1 / 1;
+            width: 80%;
+            border-radius: 100%;
+            background-color: rgba(255, 0, 0, 0.83);
+            animation: rec-pulse-bg;
+            animation-duration: 1.3s;
+            animation-iteration-count: infinite;
+        }
+
+        @keyframes rec-pulse-bg {
+            0% {
+                background-color: rgba(255, 0, 0, 0.53);
+            }
+
+            30% {
+                background-color: rgba(255, 0, 0, 0.83);
+            }
+
+            100% {
+                background-color: rgba(255, 0, 0, 0.53);
+            }
+        }
     </style>
 
     <body>
         <div id="gui-overlay">
-            <button id="recbtn"></button>
+            <button id="recbtn"><div id="recbtncenter"></div></button>
         </div>
 
         <div id="display-container">
