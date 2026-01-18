@@ -106,6 +106,21 @@
             let leftCameraId = 0;
             let rightCameraId = 0;
 
+            //if (navigator.userAgent.match(/iPhone/i)) {
+
+            //}
+
+            async function requestCameraPermission() {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    stream.getTracks().forEach(track => track.stop());
+                    console.log("Permission granted");
+                } catch (err) {
+                    console.error("Permission denied", err);
+                }
+            }
+
+
             async function startCamera(leftCamera, rightCamera) {
             try {
                 const leftStream = await navigator.mediaDevices.getUserMedia({
@@ -135,6 +150,7 @@
                 //console.log(cameras);
                 //startCamera(cameras[leftCameraId].deviceId, cameras[rightCameraId].deviceId)
             //});
+            requestCameraPermission();
             const cameras = await listCameras();
             console.log(cameras);
 
