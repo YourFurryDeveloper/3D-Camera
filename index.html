@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>3D Camera</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+    </head>
+
+    <style>
+        html {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+
+        #gui-overlay {
+            width: 100vw;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #display-container {
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            width: 100vw;
+            height: fit-content;
+        }
+
+        .lens-view {
+            aspect-ratio: 4 / 3;
+            width: 100%;
+            object-fit: cover;
+        }
+    </style>
+
+    <body>
+        <div id="gui-overlay">
+            <button id="recbtn"></button>
+        </div>
+
+        <div id="display-container">
+            <video id="leftEye" class="lens-view" style="background-color: aqua;" autoplay></video>
+            <video id="rightEye" class="lens-view" style="background-color: rgb(88, 117, 117);" autoplay></video>
+        </div>
+    </body>
+
+    <script>
+        async function main() {
+            const leftEye = document.getElementById("leftEye");
+            const rightEye = document.getElementById("rightEye");
+
+            let leftCameraId = 0;
+            let rightCameraId = 0;
+
+            async function startCamera(leftCamera, rightCamera) {
+            try {
+                const leftStream = await navigator.mediaDevices.getUserMedia({
+                video: { deviceId: { exact: leftCamera } },
+                audio: false
+                });
+                const rightStream = await navigator.mediaDevices.getUserMedia({
+                video: { deviceId: { exact: rightCamera } },
+                audio: false
+                });
+
+                leftEye.srcObject = leftStream;
+                rightEye.srcObject = leftStream;
+            } catch (err) {
+                console.error("Error accessing camera:", err);
+            }
+            }
+
+            async function listCameras() {
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                const cameras = devices.filter(d => d.kind === "videoinput");
+                cameras.forEach(cam => console.log(cam.label, cam.deviceId));
+                return cameras;
+            }
+
+            //const cameras = listCameras().then(cameras => {
+                //console.log(cameras);
+                //startCamera(cameras[leftCameraId].deviceId, cameras[rightCameraId].deviceId)
+            //});
+            const cameras = await listCameras();
+            console.log(cameras);
+
+            setTimeout(startCamera(cameras[leftCameraId].deviceId, cameras[rightCameraId].deviceId), 1000);
+            //startCamera(cameras[leftCameraId].deviceId, cameras[rightCameraId].deviceId)
+        }
+
+        main()
+    </script>
+</html>
